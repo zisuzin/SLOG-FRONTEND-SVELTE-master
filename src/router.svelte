@@ -8,4 +8,4 @@
 <Route path="/" redirect="/articles" />
 <Route path="/articles/*"><Articles/></Route>
 <Route path="/login"><Login/></Route>
-<Route path="/register"></Route>
+<Route path="/register"><Register/></Route>
