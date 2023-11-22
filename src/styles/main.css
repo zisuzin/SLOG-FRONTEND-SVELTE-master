@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
 @layer base {
   html {
@@ -13,7 +14,6 @@
 }
 
 @layer components {
-
   .main-container {
     @apply flex flex-col h-screen 
   }
