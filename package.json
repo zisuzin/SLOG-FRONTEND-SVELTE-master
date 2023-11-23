@@ -13,5 +13,8 @@
     "svelte": "^3.54.0",
     "tinro": "^0.6.12",
     "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "axios": "^1.6.2"
   }
 }

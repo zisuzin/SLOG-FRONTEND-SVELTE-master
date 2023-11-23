@@ -1,12 +1,27 @@
 @charset "utf-8";
 
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
+/* 공통모듈 CSS - common.css */
+@import url(./reset.css);
+@import url(./core.css);
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3.5rem;
+    padding: 0.625rem;
+    width: 100%;
+    top: 0;
+    background-color: #113273;
+    z-index: 20;
+}
 
 .main-container {
     height: 100vh;
 }
 
 .slog-main {
+    padding-top: 1rem;
     height: 100%;
     overflow-y: auto;
     background-color: #f7fafc;
@@ -20,32 +35,13 @@
 
 /* .main-menu */
 .main-menu {
-    font-size: 1.125rem;
+    font-size: 16px;
     color: #fff;
     font-weight: bold;
 }
 .main-nav {
     display: flex;
     justify-content: center;
-}
-
-.main-menu-selected {
-    font-size: 2rem;
-    text-decoration: underline;
-}
-.main-menu-blocked {
-    color: #718096;
-}
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 3.5rem;
-    padding: 0.625rem;
-    width: 100%;
-    top: 0;
-    background-color: #113273;
-    z-index: 20;
 }
 
 /* slog-content */
@@ -64,7 +60,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 1.25rem;
-    margin: 0.625rem;
+    width: 630px;
     margin: 0 auto;
     justify-content: space-between;
     background: #fff;
@@ -72,6 +68,10 @@
     border: 1px solid #e2e8f0;
     border-top: 1px solid #cbd5e0;
     border-bottom: 2px solid #a0aec0;
+}
+.slog-list-wrap {
+    width: 630px;
+    margin: 0 auto;
 }
 
 .content-box-header {
@@ -117,18 +117,6 @@
     padding: 1rem;
     display: flex;
     justify-content: flex-end;
-}
-.button-box-inner-left {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-.button-box-inner-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 }
 
 .slog-ul {
@@ -229,9 +217,9 @@
 
 .auth-box {
     margin-top: 1.25rem;
-    width: 100%;
+    width: 500px;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
 }
 
 .auth-content-box {
@@ -243,7 +231,7 @@
     border: 1px solid #e2e8f0;
     border-top: 1px solid #cbd5e0;
     border-bottom: 2px solid #a0aec0;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .auth-input-box {
@@ -253,15 +241,16 @@
     width: 100%;
     margin-top: 1.75rem;
 }
+.auth-input-text {
+    width: 100%;
+    font-size: 1rem;
+    color: #1a202c;
+    border-bottom: 1px solid #e2e8f0;
+    padding-top: 2.5rem;
+}
 .auth-input-label {
     position: absolute;
-    font-weight: normal;
-    font-size: 1.25rem;
     color: #718096;
-    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out, top 0.3s ease-in-out;
-    transform: translateY(-1.5rem) scale(0.75);
-    top: 0.75rem;
-    left: 0;
 }
 
 /* buttons */
@@ -288,21 +277,30 @@
     font-weight: bold;
 }
 .button-base-circle:hover {
-    background-color: #f7fafc; 
+    background-color: #f7fafc;
 }
 .button-box-full {
-    display: flex; 
+    display: flex;
     justify-content: flex-end;
-    padding-top: 0.75rem; 
+    padding-top: 0.75rem;
+}
+
+.text-white {
+    color: #fff;
+    width: 25px;
+    height: 25px;
+}
+.text-white svg {
+    fill: #fff;
 }
 
 /* loading-box */
 .full-loading-box {
     width: 100%;
-    height: 100vh; 
+    height: 100vh;
     background-color: #1a202c;
-    position: fixed; 
-    top: 0;  
+    position: fixed;
+    top: 0;
     left: 0;
     z-index: 50;
     display: flex;
@@ -325,27 +323,27 @@
 }
 
 .article-loading-item {
-    margin-right: 0.5rem; 
+    margin-right: 0.5rem;
     width: 2rem;
     height: 2rem;
-    color: #cbd5e0; 
+    color: #cbd5e0;
     animation: spin 0.8s linear infinite;
 }
 
 /* common */
 .p-user {
-    font-weight: bold;  
+    font-weight: bold;
     margin-right: 0.75rem;
-    line-height: 1.25rem;   
+    line-height: 1.25rem;
 }
 
 .p-date {
-    font-size: 1rem;  
-    line-height: 1.25rem; 
+    font-size: 1rem;
+    line-height: 1.25rem;
 }
 .p-date-comment {
-    font-size: 0.875rem;  
-    line-height: 1.25rem;  
+    font-size: 0.875rem;
+    line-height: 1.25rem;
 }
 
 /* not found page */
@@ -357,7 +355,7 @@
     top: 0;
     left: 0;
     z-index: -10;
-    display: flex; 
+    display: flex;
     justify-content: center;
     align-items: center;
 }

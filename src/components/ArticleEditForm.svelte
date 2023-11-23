@@ -8,7 +8,7 @@
     </div>
     
     <div class="content-box-main">
-      <textarea id="message" rows="5" class="slog-content-textarea " placeholder="내용을 입력해 주세요."></textarea>
+      <textarea id="message" rows="5" class="slog-content-textarea" placeholder="내용을 입력해 주세요."></textarea>
     </div>
     
     <div class="content-box-bottom">

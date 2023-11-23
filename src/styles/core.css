@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+/* 공통클래스/웹폰트 CSS - core.css */
+/* 웹폰트, 공용클래스 */
+
+/******************** 1. 웹폰트 : CDN ********************/
+/* Nanum-Gothic */
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+    opacity: 1;
+    color: #9ca3af;
+}
+
+input::placeholder,
+textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+}
+
+button,[role="button"] {
+    cursor: pointer;
+}
+
+img, svg {
+    display: block;
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    border-color: hsl(220, 13%, 91%);
+}
