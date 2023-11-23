@@ -13,14 +13,13 @@
 
     // 로그인 발생 메서드
     const onLogin = async () => {
-      try {
-        console.log("로그인!")
-        await auth.login(values.formEmail, values.formPassword);
-        resetValues();
-      } 
-      catch (error) {
-        alert('인증이 되지 않았습니다. 다시 시도해 주세요.')
-      } 
+        try {
+            await auth.login(values.formEmail, values.formPassword);
+            resetValues();
+        } 
+        catch (error) {
+            alert('인증이 되지 않았습니다. 다시 시도해 주세요.')
+        } 
     }
 </script>
 
