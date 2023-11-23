@@ -8,7 +8,7 @@ function setCurrentArticlesPage() {
 
     const resetPage = () => set(1);
     const increPage = () => {
-        update(data => data = data + 1);
+        update((data) => (data = data + 1));
         articles.fetchArticles();
     };
 
@@ -16,19 +16,19 @@ function setCurrentArticlesPage() {
         subscribe,
         resetPage,
         increPage,
-    }
+    };
 }
 
-// 좋아요, 댓글 추가시 상태 변경 스토어 
+// 좋아요, 댓글 추가시 상태 변경 스토어
 function setArticles() {
     let initValues = {
         articleList: [],
         totalPageCount: 0,
-        menuPopup: '',
-        editMode: '',
-    }
+        menuPopup: "",
+        editMode: "",
+    };
 
-    const { subscribe, update, set } = writable({...initValues});
+    const { subscribe, update, set } = writable({ ...initValues });
 
     // 페이지 증가시 호출
     const fetchArticles = async () => {
@@ -42,35 +42,34 @@ function setArticles() {
             const options = {
                 path: path,
                 access_token: access_token,
-            }
+            };
 
             const getDatas = await getApi(options);
             const newData = {
                 articleList: getDatas.articleList,
                 totalPageCount: getDatas.totalPageCount,
-            }
+            };
 
-            update(datas => {
+            update((datas) => {
                 if (curretPage === 1) {
                     datas.articleList = newData.articleList;
                     datas.totalPageCount = newData.totalPageCount;
-                }
-                else {
+                } else {
                     const newArticles = [...datas.articleList, ...newData.articleList];
                     datas.articleList = newArticles;
                     datas.totalPageCount = newData.totalPageCount;
                 }
                 return datas;
-            })
-        }
-        catch {
-
+            });
+        } catch (error) {
+            loadingArticle.turnOffLoading();
+            throw error;
         }
     };
 
     // articles 스토어 초기화
     const resetArticles = () => {
-        set({...initValues});
+        set({ ...initValues });
         currentArticlesPage.resetPage();
     };
 
@@ -78,7 +77,7 @@ function setArticles() {
         subscribe,
         fetchArticles,
         resetArticles,
-    }
+    };
 }
 
 // 로딩상태 표시 스토어
@@ -93,46 +92,44 @@ function setComments() {}
 // 로그인된 유저 정보 스토어
 function setAuth() {
     let initValues = {
-        id: '',
-        email: '',
-        Authorization: '',
-    }
+        id: "",
+        email: "",
+        Authorization: "",
+    };
 
-    const { subscribe, set, update } = writable({...initValues});
+    const { subscribe, set, update } = writable({ ...initValues });
 
     // 서버로 access_token 재요청
     const refresh = async () => {
         try {
-            const authenticationUser = await postApi({path: '/auth/refresh'});
+            const authenticationUser = await postApi({ path: "/auth/refresh" });
             set(authenticationUser);
             isRefresh.set(true);
-        }
-        catch (err) {
+        } catch (err) {
             auth.resetUserInfo();
             isRefresh.set(false);
         }
     };
 
     // auth 스토어 초기화
-    const resetUserInfo = () => set({...initValues});
+    const resetUserInfo = () => set({ ...initValues });
     const login = async (email, password) => {
         try {
             const options = {
-                path: '/auth/login',
+                path: "/auth/login",
                 data: {
                     email: email,
                     pwd: password,
-                }
-            }
+                },
+            };
 
             const result = await postApi(options);
             set(result);
             isRefresh.set(true);
             // 첫 화면 이동
-            router.goto('/');
-            console.log('회원가입 성공!')
-        }
-        catch (error) {
+            router.goto("/");
+            console.log("회원가입 성공!");
+        } catch (error) {
             // alert('오류가 발생했습니다. 로그인을 다시 시도해 주세요.');
             throw error;
         }
@@ -140,34 +137,32 @@ function setAuth() {
     const logout = async () => {
         try {
             const options = {
-                path: '/auth/logout',
-            }
+                path: "/auth/logout",
+            };
 
             await delApi(options);
-            set({...initValues});
+            set({ ...initValues });
             isRefresh.set(false);
-            router.goto('/');
-        }
-        catch (error) {
-            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+            router.goto("/");
+        } catch (error) {
+            alert("오류가 발생했습니다. 다시 시도해 주세요.");
         }
     };
     const register = async (email, pwd) => {
         try {
             const options = {
-                path: '/auth/register',
+                path: "/auth/register",
                 data: {
                     email: email,
                     pwd: pwd,
-                }
-            }
+                },
+            };
 
             await postApi(options);
-            alert('가입이 완료되었습니다.');
-            router.goto('/login');
-        }
-        catch (error) {
-            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+            alert("가입이 완료되었습니다.");
+            router.goto("/login");
+        } catch (error) {
+            alert("오류가 발생했습니다. 다시 시도해 주세요.");
         }
     };
 
@@ -178,7 +173,7 @@ function setAuth() {
         logout,
         resetUserInfo,
         register,
-    }
+    };
 }
 
 // 모두보기, 좋아요보기, 내글보기 등 보기 상태 스토어
@@ -186,12 +181,12 @@ function setArticlesMode() {}
 
 // 로그인 상태 확인 스토어
 function setIsLogin() {
-    const checkLogin = derived(auth, $auth => $auth.Authorization ? true : false)
+    const checkLogin = derived(auth, ($auth) => ($auth.Authorization ? true : false));
     return checkLogin;
 }
 
 export const currentArticlesPage = setCurrentArticlesPage();
-export const aritles = setArticles();
+export const articles = setArticles();
 export const loadingArticle = setLoadingArticle();
 export const articleContent = setArticleContent();
 export const comments = setComments();
