@@ -1,24 +1,55 @@
 <script>
     export let article;
+    import { articles, auth } from "../stores";
+    import ArticleEditForm from "./ArticleEditForm.svelte";
+
+    // 메뉴 보이기 상태
+    let isViewMenu = false;
+
+    $: {
+        if ($articles.menuPopup === article.id) {
+            isViewMenu = true;
+        }
+        else {
+            isViewMenu = false;
+        }
+    } 
+    
+    const onToggleMenuPopup = (id) => {
+        if (isViewMenu === true) {
+            articles.closeMenuPopup();
+            return;
+        }
+        articles.openMenuPopup(id);
+    }
+
+    const onEditModeArticle = (id) => {
+        articles.openEditModeArticle(id);
+    }
 </script>
 
+{#if $articles.editMode === article.id}
+    <ArticleEditForm {article}/>
+{:else}
 <!-- slog-content-box start-->
-<div class="slog-content-box" >
+<div class="slog-content-box">
     <div class="content-box-header">
       <div class="content-box-header-inner-left " >
         <p class="p-user">{article.userEmail}</p>
         <p class="p-date">{article.createdAt}</p>
       </div>
       <div class="content-box-header-inner-right">
-        <button class="button-base-circle">
+        {#if article.userId === $auth.id}
+        <button class="button-base-circle" on:click={() => onToggleMenuPopup(article.id)}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>
         </button>
-        <div class="drop-menu-box">
+        <div class="drop-menu-box" class:block={isViewMenu}>
           <ul>
-            <li><button class="drop-menu-button">수정</button></li>
+            <li><button class="drop-menu-button" on:click={() => onEditModeArticle(article.id)}>수정</button></li>
             <li><button class="drop-menu-button">삭제</button></li>
           </ul>              
         </div>
+        {/if}
       </div>
     </div>
     
@@ -45,4 +76,5 @@
       </div>
     </div>
 </div>
+{/if}
 <!-- slog-content-box end -->

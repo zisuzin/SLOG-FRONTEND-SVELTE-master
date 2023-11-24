@@ -1,6 +1,6 @@
 <script>
     import { router } from "tinro";
-	import { auth, isLogin } from './../stores/index.js';
+	import { auth, isLogin } from '../stores';
 
     const goLogin = () => router.goto('/login');
     const onLogout = () => auth.logout();

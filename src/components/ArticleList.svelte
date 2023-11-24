@@ -1,13 +1,14 @@
 <script>
     import { onMount } from "svelte";
-    import { articles, currentArticlesPage } from "../stores";
+    import { articles, currentArticlesPage, loadingArticle, articlePageLock } from "../stores";
     import Article from "./Article.svelte";
+    import ArticleLoading from "./ArticleLoading.svelte";
 
     let component;
     let element;
 
     onMount(() => {
-      articles.resetArticles() ;
+      articles.resetArticles();
       articles.fetchArticles(); 
     })
 
@@ -20,6 +21,7 @@
     }
 
     const onScroll = (e) => {
+        console.log("스크롤 !")
         const scrollHeight = e.target.scrollHeight;
         const clientHeight = e.target.clientHeight;
         const scrollTop = e.target.scrollTop;
@@ -30,8 +32,18 @@
             return scrollTop > triggerHeight;
         }
 
+        // 현재 페이지가 전체페이지보다 작거나 같으면 true 리턴
+        const countCheck = () => {
+            const check = $articles.totalPageCount <= $currentArticlesPage
+            return check;
+        }
+
+        if (countCheck()) {
+            articlePageLock.set(true);
+        }
+
         const scrollTrigger = () => {
-            return triggerComputed();
+            return triggerComputed() && !countCheck() && !$articlePageLock;
         }
 
         if (scrollTrigger()) {
@@ -49,5 +61,18 @@
         </li>
         {/each}
     </ul>
+
+    {#if $loadingArticle}
+        <ArticleLoading/>
+    {/if}
+    <!-- <InfiniteScroll 
+      loading={$loadingArticle}
+      pageLock={$articlePageLock}
+      totalPageCount={$articles.totalPageCount} 
+      currentPage={$currentArticlesPage} 
+      domTarget={'.infiniteTarget'}
+      on:onPageLock={() => articlePageLock.set(true)}
+      on:increPage={() => currentArticlesPage.increPage()}  
+    /> -->
 </div>
 <!-- slog-list-wrap end-->

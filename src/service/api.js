@@ -3,7 +3,7 @@ import axios from "axios";
 // 실제 api 호출할 부분
 const send = async ({ method = "", path = "", data = {}, access_token = "" } = {}) => {
     // 공통 주소
-    const commonUrl = 'http://localhost:3000';
+    const commonUrl = "http://localhost:3000";
     // api 전달 주소
     const url = commonUrl + path;
 
@@ -28,8 +28,7 @@ const send = async ({ method = "", path = "", data = {}, access_token = "" } = {
     try {
         const response = await axios(options);
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         throw error;
     }
 };
