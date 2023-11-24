@@ -10,11 +10,11 @@
     }
 
     const onCloseEditModeArticle = () => {
-        
+        articles.closeEditModeArticle();
     }
 
     const onUpdateArticle = () => {
-
+        articles.updateArticle(articleValue);
     }
 </script>
 
@@ -33,8 +33,8 @@
     
     <div class="content-box-bottom">
       <div class="button-box">
-        <button class="button-base">완료</button>
-        <button class="button-base">취소</button>
+        <button class="button-base" on:click={onUpdateArticle}>완료</button>
+        <button class="button-base" on:click={onCloseEditModeArticle}>취소</button>
       </div>
     </div>
 </div>

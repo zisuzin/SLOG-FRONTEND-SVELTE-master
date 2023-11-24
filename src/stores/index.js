@@ -75,6 +75,39 @@ function setArticles() {
         }
     };
 
+    // articles 스토어 초기화
+    const resetArticles = () => {
+        set({ ...initValues });
+        currentArticlesPage.resetPage();
+        // 페이지 잠금 해제
+        articlePageLock.set(false);
+    };
+
+    const addArticle = async (content) => {
+        const access_token = get(auth).Authorization;
+
+        try {
+            const options = {
+                path: "/articles",
+                data: {
+                    content: content,
+                },
+                access_token: access_token,
+            };
+
+            const newArticle = await postApi(options);
+
+            update((datas) => {
+                datas.articleList = [newArticle, ...datas.articleList];
+                return datas;
+            });
+
+            return;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     // 팝업 열기
     const openMenuPopup = (id) => {
         update((datas) => {
@@ -118,7 +151,7 @@ function setArticles() {
             }
 
             const options = {
-                path: '/article',
+                path: '/articles',
                 data: updateData,
                 access_token: access_token,
             }
@@ -166,39 +199,6 @@ function setArticles() {
             alert('삭제 중 오류가 발생했습니다.')
         }
     }
-
-    // articles 스토어 초기화
-    const resetArticles = () => {
-        set({ ...initValues });
-        currentArticlesPage.resetPage();
-        // 페이지 잠금 해제
-        articlePageLock.set(false);
-    };
-
-    const addArticle = async (content) => {
-        const access_token = get(auth).Authorization;
-
-        try {
-            const options = {
-                path: "/articles",
-                data: {
-                    content: content,
-                },
-                access_token: access_token,
-            };
-
-            const newArticle = await postApi(options);
-
-            update((datas) => {
-                datas.articleList = [newArticle, ...datas.articleList];
-                return datas;
-            });
-
-            return;
-        } catch (error) {
-            throw error;
-        }
-    };
 
     return {
         subscribe,
