@@ -7,8 +7,8 @@
     let element;
 
     onMount(() => {
-      articles.resetArticles();  
-      articles.fetchArticles();  
+      articles.resetArticles() ;
+      articles.fetchArticles(); 
     })
 
     $: {
@@ -20,10 +20,10 @@
     }
 
     const onScroll = (e) => {
-        const scrollHeigth = e.target.scrollHeigth;
+        const scrollHeight = e.target.scrollHeight;
         const clientHeight = e.target.clientHeight;
         const scrollTop = e.target.scrollTop;
-        const realHeight = scrollHeigth - clientHeight;
+        const realHeight = scrollHeight - clientHeight;
         const triggerHeight = realHeight * 0.7;
 
         const triggerComputed = () => {

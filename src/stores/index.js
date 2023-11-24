@@ -34,24 +34,26 @@ function setArticles() {
     const fetchArticles = async () => {
         // 스토어 값을 get으로 받아와야 하는 경우:
         // 다른 스토어에서 값 참조, 일반 js 파일에서 값 참조
-        const curretPage = get(currentArticlesPage);
-        let path = `/articles/?pageNumber=${curretPage}`;
+        const currentPage = get(currentArticlesPage);
+        let path = `/articles/?pageNumber=${currentPage}`;
 
         try {
             const access_token = get(auth).Authorization;
+
             const options = {
                 path: path,
                 access_token: access_token,
             };
 
             const getDatas = await getApi(options);
+
             const newData = {
                 articleList: getDatas.articleList,
                 totalPageCount: getDatas.totalPageCount,
             };
 
-            update((datas) => {
-                if (curretPage === 1) {
+            update(datas => {
+                if (currentPage === 1) {
                     datas.articleList = newData.articleList;
                     datas.totalPageCount = newData.totalPageCount;
                 } else {
@@ -59,10 +61,10 @@ function setArticles() {
                     datas.articleList = newArticles;
                     datas.totalPageCount = newData.totalPageCount;
                 }
+
                 return datas;
             });
         } catch (error) {
-            loadingArticle.turnOffLoading();
             throw error;
         }
     };
@@ -181,7 +183,7 @@ function setArticlesMode() {}
 
 // 로그인 상태 확인 스토어
 function setIsLogin() {
-    const checkLogin = derived(auth, ($auth) => ($auth.Authorization ? true : false));
+    const checkLogin = derived(auth, $auth => $auth.Authorization ? true : false);
     return checkLogin;
 }
 
