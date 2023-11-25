@@ -200,6 +200,92 @@ function setArticles() {
         }
     }
 
+    // 댓글 수 증가
+    const increArticleCommentCount = (articleId) => {
+        update(datas => {
+            const newArticleList = datas.articleList.map(article => {
+                if (article.id === articleId) {
+                    article.commentCount = article.commentCount + 1
+                }
+                return article;
+            })
+            datas.articleList = newArticleList;
+            return datas;
+        })
+    }
+
+    // 댓글 수 감소
+    const decreArticleCommentCount = (articleId) => {
+        update(datas => {
+            const newArticleList = datas.articleList.map(article => {
+                if (article.id === articleId) {
+                    article.commentCount = article.commentCount - 1;
+                }
+                return article;
+            })
+
+            datas.articleList = newArticleList;
+            return datas;
+        })
+    }
+
+    // 좋아요 갯수 표시
+    const likeArticle = async (articleId) => {
+        const access_token = get(auth).Authorization;
+
+        try {
+            const options = {
+                path: `/likes/add/${articleId}`,
+                access_token: access_token,
+            }
+
+            await postApi(options);
+            update(datas => {
+                const newArticle = datas.articleList.map(article => {
+                    if (article.id === articleId) {
+                        // 좋아요 갯수 카운트
+                        article.likeCount = article.likeCount + 1;
+                        // 좋아요 클릭시 버튼 상태 변경
+                        article.likeMe = true;
+                    }
+                    return article;
+                })
+                datas.articleList = newArticle;
+                return datas;
+            })
+        }
+        catch (error) {
+            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+        }
+    }
+
+    const cancelLikeArticle = async (articleId) => {
+        const access_token = get(auth).Authorization;
+
+        try {
+            const options = {
+                path: `/likes/cancel/${articleId}`,
+                access_token: access_token,
+            }
+            await postApi(options);
+            update(datas => {
+                const newArticles = datas.articleList.map(article => {
+                    if (article.id === articleId) {
+                        article.likeCount = article.likeCount - 1;
+                        article.likeMe = false;
+                    }
+                    return article;
+                })
+                datas.articleList = newArticles;
+                return datas;
+            })
+
+        }
+        catch (error) {
+            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+        }
+    }
+
     return {
         subscribe,
         fetchArticles,
@@ -211,6 +297,10 @@ function setArticles() {
         closeEditModeArticle,
         updateArticle,
         deleteArticle,
+        increArticleCommentCount,
+        decreArticleCommentCount,
+        likeArticle,
+        cancelLikeArticle,
     };
 }
 
@@ -239,10 +329,124 @@ function setLoadingArticle() {
 }
 
 // 게시물 하나의 정보를 담는 스토어
-function setArticleContent() {}
+function setArticleContent() {
+    let initValues = {
+        id: '',
+        userId: '',
+        userEmail: '',
+        content: '',
+        createdAt: '',
+        commentCount: 0,
+        likeCount: 0,
+        likeUsers: [],
+    }
+
+    const { subscribe, set } = writable({...initValues});
+
+    const getArticle = async (id) => {
+        try {
+            const options = {
+                path: `/articles/${id}`
+            }
+
+            const getData = await getApi(options);
+            set(getData);
+        }
+        catch (error) {
+            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+        }
+    }
+
+    return {
+        subscribe,
+        getArticle,
+    };
+}
 
 // 댓글 추가, 수정, 삭제 처리 스토어
-function setComments() {}
+function setComments() {
+    const { subscribe, update, set} = writable([]);
+
+    // 댓글 목록 불러오기
+    const fetchComments = async (id) => {
+        try {
+            const options = {
+                path: `/comments/${id}`
+            }
+
+            const getDatas = await getApi(options);
+            set(getDatas.comments);
+        }
+        catch (error) {
+            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+        }
+    };
+
+    // 댓글 추가
+    const addComent = async (articleId, commentCount) => {
+        // 로그인 사용자로 제한
+        const access_token = get(auth).Authorization;
+
+        try {
+            const options = {
+                path: '/comments',
+                data: {
+                    articleId: articleId,
+                    content: commentCount,
+                },
+                access_token: access_token,
+            }
+
+            // 서버로 새 댓글 추가 요청
+            const newData = await postApi(options);
+            // 현재 댓글에 새 댓글 추가
+            update(datas => [...datas, newData]);
+            articles.increArticleCommentCount(articleId);
+        }
+        catch (error) {
+            alert('오류가 발생했습니다. 다시 시도해 주세요.')
+        }
+    };
+
+    const deleteComment = async (commentId, articleId) => {
+
+        const access_token = get(auth).Authorization;
+
+        try {
+            const options = {
+                path: '/comments',
+                data: {
+                    commentId: commentId,
+                    articleId: articleId,
+                },
+                access_token: access_token,
+            }
+
+            // 서버로 삭제 요청
+            await delApi(options);
+            update(datas => datas.filter(comment => comment.id !== commentId));
+            articles.decreArticleCommentCount(articleId);
+            alert('댓글이 삭제 되었습니다.');
+        }
+        catch (error) {
+            alert('삭제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+
+        return {
+            subscribe,
+            fetchComments,
+            addComent,
+            deleteComment,
+        }
+    };
+
+    return {
+        subscribe,
+        fetchComments,
+        addComent,
+        deleteComment,
+    }
+}
 
 // 로그인된 유저 정보 스토어
 function setAuth() {

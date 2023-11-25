@@ -6,7 +6,7 @@
     import NotFound from './pages/NotFound.svelte';
 </script>
 
-<Route path="/" redirect="/articles" />
+<Route path="/" redirect="/articles/all" />
 <Route path="/articles/*"><Articles/></Route>
 <Route path="/login"><Login/></Route>
 <Route path="/register"><Register/></Route>

@@ -1,5 +1,31 @@
 <script>
     import Comment from "./Comment.svelte";
+
+    import { onMount } from "svelte";
+    import { router, meta } from "tinro";
+    import { articleContent, comments, isLogin } from "../stores";
+
+    const route = meta();
+    const articleId = Number(route.params.id);
+
+    let values = {
+        formContent: '',
+    }
+
+    onMount(() => {
+        articleContent.getArticle(articleId);
+        comments.fetchComments(articleId);
+    });
+
+    // 다시 게시글 목록 가기
+    const goArticles = () => router.goto(`/articles`);
+
+    // 댓글 추가
+    const onAddComment = async () => {
+        await comments.addComent(articleId, values.formContent);
+        // 입력 폼 초기화
+        values.formContent = ''
+    }
 </script>
 
 <!-- slog-comment-wrap start-->
@@ -8,31 +34,34 @@
     <div class="slog-comment-box" >
       <div class="comment-box-header ">
         <div class="content-box-header-inner-left" >
-          <p class="p-user" >freeseamew</p>
-          <p class="p-date" >2022-11-11</p>
+          <p class="p-user">{$articleContent.userEmail}</p>
+          <p class="p-date">{$articleContent.createdAt}</p>
         </div>
       </div>
       
-      <div class="comment-box-main ">
-        <p class="whitespace-pre-line">Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse. Pariatur occaecat nisi laboris tempor laboris eiusmod qui id Lorem esse commodo in. Exercitation aute dolore deserunt culpa consequat elit labore incididunt elit anim.</p>
-        <div class="inner-button-box ">
-          <button class="button-base" >글 목록 보기</button>
+      <div class="comment-box-main">
+        <p class="whitespace-pre-line">{$articleContent.content}</p>
+        <div class="inner-button-box">
+          <button class="button-base" on:click={goArticles}>글 목록 보기</button>
         </div>
       </div>
       
       <div class="commnet-list-box ">
         <h1 class="comment-title">Comments</h1>
         <ul class="my-5">
-          <Comment/>
+          {#each $comments as comment, index}
+          <Comment {comment} {articleId}/>
+          {/each}
         </ul>
       </div>
 
-      <div class="comment-box-bottom ">
-        <textarea id="message" rows="5" class="slog-content-textarea " placeholder="내용을 입력해 주세요."></textarea>
+      {#if $isLogin}
+      <div class="comment-box-bottom">
+        <textarea id="message" rows="5" class="slog-content-textarea " placeholder="내용을 입력해 주세요." bind:value={values.formContent}></textarea>
         <div class="button-box-full">
-          <button class="button-base" >입력</button>
+          <button class="button-base" on:click={onAddComment}>입력</button>
         </div>
       </div>
+      {/if}
     </div><!-- slog-comment-box end -->
-
 </div><!-- slog-comment-wrap end-->
