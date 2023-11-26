@@ -36,6 +36,7 @@
     padding-top: 5rem;
     overflow-y: auto;
     background-color: #f7fafc;
+    height: 100%;
 }
 
 .p-main-title {
@@ -115,7 +116,6 @@
     border-radius: 0.125rem;
     border: 1px solid #d2d6dc;
     outline: none;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .content-box-main {
     display: flex;

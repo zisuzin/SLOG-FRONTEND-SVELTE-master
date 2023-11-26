@@ -1,18 +1,27 @@
 <script>
     import { router } from "tinro";
-	import { auth, isLogin } from '../stores';
+	import { auth, isLogin, articlesMode } from '../stores';
+    import { ALL, LIKE, MY } from "../utils/constant";
 
     const goLogin = () => router.goto('/login');
     const onLogout = () => auth.logout();
+    const onChangeMode = (mode) => {
+        if ($articlesMode !== mode) articlesMode.changeMode(mode);
+    }
 </script>
 
 <!-- start header -->
 <header class="main-header">
     <p class="p-main-title" >SLogs </p>
     <nav class="main-nav">
-          <button  class=" main-menu mr-6">모두 보기</button>    
-        <button class="main-menu mr-6">좋아요 보기</button>
-        <button class="main-menu">내글 보기</button>          
+        <button  class=" main-menu mr-6" class:main-menu-selected={$articlesMode === ALL} on:click={() => onChangeMode(ALL)}>모두 보기</button>    
+        {#if $isLogin}
+        <button class="main-menu mr-6" class:main-menu-selected={$articlesMode === LIKE} on:click={() => onChangeMode(LIKE)}>좋아요 보기</button>
+        <button class="main-menu" class:main-menu-selected={$articlesMode === MY} on:click={() => onChangeMode(MY)}>내글 보기</button>          
+        {:else}
+        <button class="main-menu mr-6 main-menu-blocked">좋아요 보기</button>
+        <button class="main-menu main-menu-blocked">내글 보기</button>
+        {/if}
     </nav>
     {#if $isLogin}
     <!--로그아웃 -->

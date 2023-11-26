@@ -1,6 +1,7 @@
 import { writable, get, derived } from "svelte/store";
 import { getApi, putApi, delApi, postApi } from "../service/api.js";
 import { router } from "tinro";
+import { ALL, LIKE, MY } from '../utils/constant.js';
 
 // 게시물 스크롤시 페이지 증가 스토어
 function setCurrentArticlesPage() {
@@ -38,7 +39,24 @@ function setArticles() {
         // 다른 스토어에서 값 참조, 일반 js 파일에서 값 참조
         const currentPage = get(currentArticlesPage);
         console.log(currentPage);
-        let path = `/articles/?pageNumber=${currentPage}`;
+        // let path = `/articles/?pageNumber=${currentPage}`;
+        let path = '';
+        const mode = get(articlesMode);
+
+        switch(mode) {
+            case ALL:
+                path=`/articles/?pageNumber=${currentPage}`
+                break;
+            case LIKE:
+                path=`/likes/?pageNumber=${currentPage}`
+                break;
+            case MY:
+                path=`/articles/?pageNumber=${currentPage}&mode=${mode}`
+                break;
+            default:
+                path=`/articles/${currentPage}`
+                break;
+        }
 
         try {
             const access_token = get(auth).Authorization;
@@ -535,7 +553,19 @@ function setAuth() {
 }
 
 // 모두보기, 좋아요보기, 내글보기 등 보기 상태 스토어
-function setArticlesMode() {}
+function setArticlesMode() {
+    const { subscribe, update, set } = writable(ALL);
+
+    const changeMode = async (mode) => {
+        set(mode);
+        articles.resetArticles();
+        await articles.fetchArticles();
+    }    
+    return {
+        subscribe,
+        changeMode,
+    }
+}
 
 // 로그인 상태 확인 스토어
 function setIsLogin() {
