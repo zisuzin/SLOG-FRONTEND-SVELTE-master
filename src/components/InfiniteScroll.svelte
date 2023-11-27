@@ -33,7 +33,6 @@
     }	
   
     const onScroll = (e) => {
-  
       const scrollHeight = e.target.scrollHeight
       const clientHeight = e.target.clientHeight
       const scrollTop = e.target.scrollTop
@@ -63,7 +62,6 @@
     }	
 </script>
 
-<!-- <div  style="width: 0;" bind:this={component} /> -->
 {#if loading }
     <ArticleLoading />
 {/if}
