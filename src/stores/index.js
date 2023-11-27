@@ -38,8 +38,7 @@ function setArticles() {
         // 스토어 값을 get으로 받아와야 하는 경우:
         // 다른 스토어에서 값 참조, 일반 js 파일에서 값 참조
         const currentPage = get(currentArticlesPage);
-        console.log(currentPage);
-        // let path = `/articles/?pageNumber=${currentPage}`;
+        console.log("현재 페이지: ", currentPage);
         let path = '';
         const mode = get(articlesMode);
 
@@ -79,7 +78,9 @@ function setArticles() {
                     datas.totalPageCount = newData.totalPageCount;
                 } else {
                     const newArticles = [...datas.articleList, ...newData.articleList];
-                    datas.articleList = newArticles;
+                    const uniqueArr = newArticles.filter((arr, index, callback) => index === callback.findIndex(t => t.id === arr.id));
+                    datas.articleList = uniqueArr;
+                    console.log(uniqueArr)
                     datas.totalPageCount = newData.totalPageCount;
                 }
 
@@ -505,7 +506,7 @@ function setAuth() {
             set(result);
             isRefresh.set(true);
             // 첫 화면 이동
-            router.goto("/articles");
+            router.goto("/");
         } catch (error) {
             alert("오류가 발생했습니다. 로그인을 다시 시도해 주세요.");
         }

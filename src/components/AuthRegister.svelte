@@ -16,7 +16,6 @@
             await auth.register(values.formEmail, values.formPassword);
         }
         catch (error) {
-            // alert('회원가입에 실패했습니다. 다시 시도해 주세요.')
             errors = extractErrors(error);
             if (errors.formEmail) alert(errors.formEmail);
             if (errors.formPassword) alert(errors.formPassword);

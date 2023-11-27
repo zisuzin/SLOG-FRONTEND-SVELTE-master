@@ -22,7 +22,6 @@
             resetValues();
         } 
         catch (error) {
-            // alert('인증이 되지 않았습니다. 다시 시도해 주세요.')
             errors = extractErrors(error);
 
             if (errors.formEmail) alert(errors.formEmail);

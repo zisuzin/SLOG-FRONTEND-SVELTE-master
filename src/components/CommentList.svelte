@@ -11,6 +11,7 @@
 
     const route = meta();
     const articleId = Number(route.params.id);
+    const currentMode = $router.path.split("/")[2];
 
     let values = {
         formContent: '',
@@ -22,7 +23,7 @@
     });
 
     // 다시 게시글 목록 가기
-    const goArticles = () => router.goto(`/articles`);
+    const goArticles = () => router.goto(`/articles/${currentMode}`);
 
     // 댓글 추가
     const onAddComment = async () => {

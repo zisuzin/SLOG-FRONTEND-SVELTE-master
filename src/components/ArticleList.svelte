@@ -1,15 +1,16 @@
 <script>
     import { onMount } from "svelte";
-    import { articles, currentArticlesPage, loadingArticle, articlePageLock } from "../stores";
+    import { articles, currentArticlesPage, loadingArticle, articlePageLock, articlesMode } from "../stores";
     import Article from "./Article.svelte";
     import ArticleLoading from "./ArticleLoading.svelte";
+    import { router } from "tinro";
 
     let component;
     let element;
+    let currentMode = $router.path.split("/")[2];
 
     onMount(() => {
-      articles.resetArticles();
-      articles.fetchArticles(); 
+        articlesMode.changeMode(currentMode);
     })
 
     $: {
@@ -65,14 +66,5 @@
     {#if $loadingArticle}
         <ArticleLoading/>
     {/if}
-    <!-- <InfiniteScroll 
-      loading={$loadingArticle}
-      pageLock={$articlePageLock}
-      totalPageCount={$articles.totalPageCount} 
-      currentPage={$currentArticlesPage} 
-      domTarget={'.infiniteTarget'}
-      on:onPageLock={() => articlePageLock.set(true)}
-      on:increPage={() => currentArticlesPage.increPage()}  
-    /> -->
 </div>
 <!-- slog-list-wrap end-->

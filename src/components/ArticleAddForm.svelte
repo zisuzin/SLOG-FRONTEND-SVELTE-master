@@ -31,7 +31,7 @@
 <div class="slog-add-content-box">
     <div class="content-box-header">
       <div class="flex" >
-        <p>지금 여러분의 생각을 적어주세요.</p>
+        <p>새 게시물 작성</p>
       </div>
     </div>
     <div class="content-box-main">
