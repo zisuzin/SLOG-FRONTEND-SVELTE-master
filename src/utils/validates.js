@@ -3,7 +3,7 @@ import * as yup from 'yup';
 // 폼 별로 발생하는 오류 수집
 export const extractErrors = error => {
     return error.inner.reduce((acc, error) => {
-        return {...acc, [error, path]: error.message}
+        return {...acc, [error.path]: error.message}
     }, {})
 }
 
