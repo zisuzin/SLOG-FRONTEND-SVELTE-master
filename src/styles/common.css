@@ -393,10 +393,7 @@
     width: 2rem;
     height: 2rem;
     color: #cbd5e0;
-    animation: spin 0.8s linear infinite;
-}
 
-.article-loading-item {
     -webkit-animation: spin 1s linear infinite;
     animation: spin 1s linear infinite;
     fill: #2563eb;
