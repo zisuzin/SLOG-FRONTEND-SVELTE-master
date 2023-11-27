@@ -519,7 +519,7 @@ function setAuth() {
             await delApi(options);
             set({ ...initValues });
             isRefresh.set(false);
-            router.goto("/");
+            articlesMode.changeMode(ALL);
         } catch (error) {
             alert("오류가 발생했습니다. 다시 시도해 주세요.");
         }
