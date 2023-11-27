@@ -1,5 +1,8 @@
 <script>
     import { articles } from "../stores";
+    import { contentValidate, extractErrors } from "../utils/validates";
+
+    let errors = {};
 
     let values = {
         formContent: '',
@@ -8,11 +11,13 @@
     // 게시글 추가 메서드
     const onAddArticle = async () => {
         try {
+            await contentValidate.validate(values, {abortEarly: false});
             await articles.addArticle(values.formContent);
             onCancelAddArticle();
         }
         catch (error) {
-            alert(error);
+            errors = extractErrors(error);
+            if (errors.formContent) alert(errors.formContent);
         }
     };
 
